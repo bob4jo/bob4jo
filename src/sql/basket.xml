@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC '-//ibatis.apache.org//DTD Sql Map 2.0//EN' 'http://ibatis.apache.org/dtd/sql-map-2.dtd'>
+<sqlMap>
+	<typeAlias alias="basket" type="basket.ms_BasketDTO"/>
+	
+	<resultMap id="basketRes" class="basket">
+			<result property="no" column="no" />
+			<result property="s_No" column="s_No"/>
+			<result property="myid" column="myid"/>
+        	<result property="store" column="store" />
+            <result property="sfile_Savname" column="sfile_Savname" />
+            <result property="m_category" column="m_category" />
+            <result property="m_No" column="m_No" />
+            <result property="m_Name" column="m_Name"/>
+            <result property="m_Price" column="m_Price" />
+            <result property="m_Savname" column="m_Savname" />
+            <result property="m_Ea" column="m_Ea"/>
+            <result property="breg_Date" column="breg_Date" />
+      </resultMap>
+      
+       <resultMap id="basketSum" class="basket">
+			
+            <result property="sum" column="sum"/>
+      </resultMap>
+     
+      
+      <sql id="bk_select-all">
+      	SELECT * FROM BASKET
+      </sql>
+      
+      <sql id="bk_where-no">
+      	WHERE no = #no#
+      </sql>
+      
+      <select id="basketSelectAll" resultMap="basketRes" parameterClass="int">
+      	<include refid="bk_select-all"/>
+      	ORDER BY no DESC
+      </select>
+      
+      <select id="basketSelectSum" resultClass="int" parameterClass="String">
+      	select sum(mul) sum from(select m_Price * m_Ea mul from basket where myid = #myid# ) 
+      </select>
+
+      <select id="bk_selectOne" resultMap="basketRes" parameterClass="int">
+      	<include refid="bk_select-all"/>
+      	<include refid="bk_where-no"/>
+      </select>
+      
+      <select id="bk_selectLastNo" resultClass="basket" parameterClass="int">
+      	SELECT max(no) as no FROM BASKET
+      </select>
+      
+      <!-- insert 쿼리문 정의 -->
+      <insert id="insertBasket" parameterClass="basket">
+      	INSERT INTO BASKET( NO,
+      						s_NO,
+      						MYID,
+      						STORE,
+      						SFILE_SAVNAME,
+      						M_CATEGORY,
+      						M_NO,
+      						M_NAME,
+      						M_PRICE,
+      						M_SAVNAME,
+      						M_EA,
+      						BREG_DATE) 
+      				VALUES(BASKET_seq.NEXTVAL,
+      						#s_No#,
+      						#myid#,
+      						#store#,
+      						#sfile_Savname#,
+      						#m_category#,
+      						#m_No#,
+      						#m_Name#,
+      						#m_Price#,
+      						#m_Savname#,
+      						#m_Ea#,
+      						#breg_Date#)
+      </insert>
+      
+      <!-- update 쿼리문 정의 -->
+      <update id="updateBasket" parameterClass="basket">
+      	UPDATE BASKET SET M_EA = #m_Ea#
+      	WHERE no = #no#
+      	
+      	
+      </update>
+      
+      <!-- delete 쿼리문 정의 -->
+      <delete id="deleteBasket" parameterClass="String">
+      	DELETE BASKET WHERE MYID = #myid#
+      </delete>
+      
+      <delete id="deleteBasketOne" parameterClass="basket">
+      	DELETE BASKET WHERE NO = #no#
+      </delete>
+
+      
+</sqlMap>

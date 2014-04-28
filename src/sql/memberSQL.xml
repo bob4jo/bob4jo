@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC '-//ibatis.apache.org//DTD Sql Map 2.0//EN' 'http://ibatis.apache.org/dtd/sql-map-2.dtd'>
+<sqlMap>
+
+	<typeAlias alias="my_member" type="email.my_memberDTO" />
+
+		
+	  	<resultMap id="my_member" class="my_member">
+		  	
+		  	<result property="myid" column="myid"/>
+		  	<result property="passwd" column="passwd"/>
+		  	<result property="myname" column="myname"/>
+		<result property="gender" column="gender"/>
+		  	<result property="year1" column="year1"/>
+		  	<result property="month1" column="month1"/>
+		  	<result property="date1" column="date1"/>
+		  	<result property="email" column="email"/>
+		  	<result property="hp1" column="hp1"/>
+		  	<result property="hp2" column="hp2"/>
+		  	<result property="hp3" column="hp3"/>
+		  	<result property="reg_date" column="reg_date"/>
+		  	<result property="emailcheck" column="emailcheck"/>
+		</resultMap>
+		
+	
+		<sql id="my_select-all">
+			SELECT * FROM my_member
+		</sql>
+		
+	
+		<sql id="my_where-myid">
+			WHERE myid = #myid#
+		</sql>
+	
+	
+	
+		<select id="my_selectAll" resultMap="my_member" parameterClass="int">
+			<include refid="my_select-all" />
+			ORDER BY no DESC
+		</select>
+		
+		<select id="my_selectOne" resultMap="my_member" parameterClass="String">
+			<include refid="my_select-all" />
+			<include refid="my_where-myid" />
+		</select>
+		
+		<select id="my_selectLastNo" resultClass="My_member" parameterClass="int"><!-- resultClass결과값이 하나일때 Map은 여러개 -->
+			SELECT max(no) as no FROM my_member
+		</select>
+		
+		<select id="my_selectPassword" resultMap="my_member" >
+			<include refid="my_select-all" />
+			<include refid="my_where-myid" />
+			AND passwd = #passwd#
+		</select>
+		
+		
+		<select id="my_membercheck" resultMap="my_member" parameterClass="my_member">
+			<include refid="my_select-all" />
+			where myid=#myid# and passwd=#passwd#
+			
+		
+		</select>
+		
+			<select id="my_confirmId" resultMap="my_member" parameterClass="my_member">
+			select myid from my_member
+			<include refid="my_where-myid" />
+			
+		
+		</select>
+		
+		<select id="my_selectEmail" resultClass="my_member"  parameterClass="String">
+			select email from my_member where myid = #myid#
+		</select>
+		
+		
+		
+		
+	
+		<insert id="my_input"  parameterClass="my_member">
+		
+      		INSERT INTO my_member (
+      		myid ,
+passwd ,
+myname ,
+gender ,
+year1 ,
+month1 ,
+date1 ,
+email ,
+hp1 ,
+hp2 ,
+hp3 ,
+reg_date,
+emailcheck
+
+                         )
+                	 VALUES (
+                	 		#myid#,
+                         	#passwd#,
+                         	#myname#,
+                         	#gender#,
+                         	#year1#,
+                         	#month1#,
+                         	#date1#,
+                         	#email#,
+                         	#hp1#,
+                         	#hp2#,
+                         	#hp3#,
+                         	#reg_date#,
+                         	#emailcheck#
+                         	
+                         	
+                         )
+		</insert>
+		
+	
+		<update id="my_update"  parameterClass="my_member">
+    		UPDATE my_member SET passwd = #passwd#,
+                     		     myname = #myname#,
+                       		      gender = #gender#,
+                       		     year1 = #year1#,
+                       		     month1 = #month1#,
+                       		     date1 = #date1#,
+                       		     email = #email#,
+                       		     hp1 = #hp1#,
+                       		     hp2 = #hp2#,
+                       		     hp3 = #hp3#
+                     <include refid="my_where-myid" />
+   		</update>
+    
+    		<update id="my_CheckUpdate"  parameterClass="my_member">
+    		UPDATE my_member SET emailcheck = #emailcheck#   		     
+                     <include refid="my_where-myid" />
+   		</update>
+    
+    		
+   
+		
+  		  <delete id="my_delete" parameterClass="my_member">
+			delete from my_member 
+			<include refid="my_where-myid" />
+   		 </delete>
+
+</sqlMap>
+
